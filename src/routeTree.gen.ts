@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicBotDiagnoseRouteImport } from './routes/api/public/bot-diagnose'
+import { Route as ApiPublicBotMessageRouteImport } from './routes/api/public/bot-message'
+import { Route as ApiPublicBotOrderRouteImport } from './routes/api/public/bot-order'
+import { Route as ApiPublicBotTicketRouteImport } from './routes/api/public/bot-ticket'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBotDiagnoseRoute = ApiPublicBotDiagnoseRouteImport.update({
+  id: '/api/public/bot-diagnose',
+  path: '/api/public/bot-diagnose',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicBotMessageRoute = ApiPublicBotMessageRouteImport.update({
+  id: '/api/public/bot-message',
+  path: '/api/public/bot-message',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicBotOrderRoute = ApiPublicBotOrderRouteImport.update({
+  id: '/api/public/bot-order',
+  path: '/api/public/bot-order',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicBotTicketRoute = ApiPublicBotTicketRouteImport.update({
+  id: '/api/public/bot-ticket',
+  path: '/api/public/bot-ticket',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/bot-diagnose': typeof ApiPublicBotDiagnoseRoute
+  '/api/public/bot-message': typeof ApiPublicBotMessageRoute
+  '/api/public/bot-order': typeof ApiPublicBotOrderRoute
+  '/api/public/bot-ticket': typeof ApiPublicBotTicketRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/bot-diagnose': typeof ApiPublicBotDiagnoseRoute
+  '/api/public/bot-message': typeof ApiPublicBotMessageRoute
+  '/api/public/bot-order': typeof ApiPublicBotOrderRoute
+  '/api/public/bot-ticket': typeof ApiPublicBotTicketRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/bot-diagnose': typeof ApiPublicBotDiagnoseRoute
+  '/api/public/bot-message': typeof ApiPublicBotMessageRoute
+  '/api/public/bot-order': typeof ApiPublicBotOrderRoute
+  '/api/public/bot-ticket': typeof ApiPublicBotTicketRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/public/bot-diagnose'
+    | '/api/public/bot-message'
+    | '/api/public/bot-order'
+    | '/api/public/bot-ticket'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/public/bot-diagnose'
+    | '/api/public/bot-message'
+    | '/api/public/bot-order'
+    | '/api/public/bot-ticket'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/public/bot-diagnose'
+    | '/api/public/bot-message'
+    | '/api/public/bot-order'
+    | '/api/public/bot-ticket'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicBotDiagnoseRoute: typeof ApiPublicBotDiagnoseRoute
+  ApiPublicBotMessageRoute: typeof ApiPublicBotMessageRoute
+  ApiPublicBotOrderRoute: typeof ApiPublicBotOrderRoute
+  ApiPublicBotTicketRoute: typeof ApiPublicBotTicketRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/bot-diagnose': {
+      id: '/api/public/bot-diagnose'
+      path: '/api/public/bot-diagnose'
+      fullPath: '/api/public/bot-diagnose'
+      preLoaderRoute: typeof ApiPublicBotDiagnoseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/bot-message': {
+      id: '/api/public/bot-message'
+      path: '/api/public/bot-message'
+      fullPath: '/api/public/bot-message'
+      preLoaderRoute: typeof ApiPublicBotMessageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/bot-order': {
+      id: '/api/public/bot-order'
+      path: '/api/public/bot-order'
+      fullPath: '/api/public/bot-order'
+      preLoaderRoute: typeof ApiPublicBotOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/bot-ticket': {
+      id: '/api/public/bot-ticket'
+      path: '/api/public/bot-ticket'
+      fullPath: '/api/public/bot-ticket'
+      preLoaderRoute: typeof ApiPublicBotTicketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicBotDiagnoseRoute: ApiPublicBotDiagnoseRoute,
+  ApiPublicBotMessageRoute: ApiPublicBotMessageRoute,
+  ApiPublicBotOrderRoute: ApiPublicBotOrderRoute,
+  ApiPublicBotTicketRoute: ApiPublicBotTicketRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
