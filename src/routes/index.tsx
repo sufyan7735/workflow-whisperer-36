@@ -26,7 +26,7 @@ function playChime() {
   } catch { /* ignore */ }
 }
 import { STAGES, type Stage } from "@/lib/crm-data";
-import { listCustomers, getMessages, sendMessage, saveNote } from "@/lib/crm.functions";
+import { listCustomers, getMessages, sendMessage, saveNote, setBotPaused } from "@/lib/crm.functions";
 import { Orders, useOrders } from "@/components/Orders";
 import { Tickets, useTickets } from "@/components/Tickets";
 import logo from "@/assets/actes-logo.png.asset.json";
@@ -380,6 +380,9 @@ type Cust = Awaited<ReturnType<typeof listCustomers>>[number];
 function Chat({ pw, c, onBack }: { pw: string; c: Cust; onBack: () => void }) {
   const get = useServerFn(getMessages);
   const send = useServerFn(sendMessage);
+  const togglePause = useServerFn(setBotPaused);
+  const [paused, setPaused] = useState(!!(c as { bot_paused?: boolean }).bot_paused);
+  useEffect(() => { setPaused(!!(c as { bot_paused?: boolean }).bot_paused); }, [c.id]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [err, setErr] = useState("");
@@ -403,8 +406,13 @@ function Chat({ pw, c, onBack }: { pw: string; c: Cust; onBack: () => void }) {
             {c.city && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.city}</span>}
           </div>
         </div>
+        <button
+          onClick={async () => { const v = !paused; setPaused(v); try { await togglePause({ data: { pw, id: c.id, paused: v } }); } catch { setPaused(!v); } }}
+          className={`flex shrink-0 items-center gap-1 rounded-lg border px-2 py-1.5 text-xs font-medium ${paused ? "border-destructive bg-destructive text-destructive-foreground" : "border-border hover:bg-muted"}`}
+        ><Bot className="h-4 w-4" />{paused ? "تشغيل البوت" : "إيقاف البوت"}</button>
         <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${stageClass[stage] ?? stageClass["new"]}`}>{STAGES[stage] ?? stage}</span>
       </header>
+      {paused && <div className="bg-destructive px-3 py-1.5 text-center text-xs text-destructive-foreground">البوت متوقف لهذا العميل — أنت تتحدث معه مباشرة</div>}
       {c.system && <div className="flex items-center gap-2 bg-secondary px-3 py-2 text-xs text-secondary-foreground"><Sun className="h-4 w-4" />{c.system}</div>}
       <div className="flex-1 space-y-2 overflow-y-auto bg-chat-bg bg-cover bg-center bg-no-repeat p-3 bg-blend-overlay dark:bg-blend-multiply"
         style={{ backgroundImage: `url(${chatBg.url})` }}>
