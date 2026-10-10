@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       customers: {
         Row: {
+          bot_paused: boolean
           city: string | null
           created_at: string
           id: string
@@ -29,6 +30,7 @@ export type Database = {
           unread: number
         }
         Insert: {
+          bot_paused?: boolean
           city?: string | null
           created_at?: string
           id?: string
@@ -42,6 +44,7 @@ export type Database = {
           unread?: number
         }
         Update: {
+          bot_paused?: boolean
           city?: string | null
           created_at?: string
           id?: string
