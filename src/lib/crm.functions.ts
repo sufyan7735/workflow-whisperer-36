@@ -22,6 +22,16 @@ export const listCustomers = createServerFn({ method: "POST" })
     return rows.map((r) => ({ ...r, notes: ((r as Record<string, unknown>)["notes"] as string | null) ?? null, last_customer_at: lastIn[r.id] ?? null }));
   });
 
+export const setBotPaused = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ pw: z.string(), id: z.string().uuid(), paused: z.boolean() }).parse(d))
+  .handler(async ({ data }) => {
+    check(data.pw);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("customers").update({ bot_paused: data.paused } as never).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const saveNote = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ pw: z.string(), id: z.string().uuid(), notes: z.string().max(5000) }).parse(d))
   .handler(async ({ data }) => {
